@@ -1,0 +1,46 @@
+from sklearn.datasets import load_breast_cancer
+import numpy as np
+b_cancer=load_breast_cancer()
+print("breast cancer dict keys:\n{}".format(b_cancer.keys()))
+print("feature names:\n{}".format(b_cancer['feature_names']))
+print("target:\n{}".format(b_cancer['target_names'][:2]))
+print("data:\n{}".format(b_cancer['data'][:5]))
+print("Sample counts per class:\n{}".format(
+ {n: v for n, v in zip(b_cancer.target_names, np.bincount(b_cancer.target))}))
+print("shape of data:{}".format(b_cancer.data.shape))
+from sklearn.model_selection import train_test_split
+Xtrain,Xtest,ytrain,ytest=train_test_split(b_cancer['data'],b_cancer['target'],random_state=0)
+print("Xtrain:{}".format(Xtrain.shape))
+print("ytrain:{}".format(ytrain.shape))
+print("Xtest:{}".format(Xtest.shape))
+print("ytest:{}".format(ytest.shape))
+
+from sklearn.neighbors import KNeighborsClassifier
+knn=KNeighborsClassifier(n_neighbors=1)
+knn.fit(Xtrain,ytrain)
+y_pred=knn.predict(Xtest)
+print("test prediction:{}".format(y_pred))
+print("test set score:{:.2f}".format(np.mean(y_pred==ytest)))
+
+#plotting graph
+from sklearn.model_selection import train_test_split
+Xtrain,Xtest,ytrain,ytest=train_test_split(b_cancer.data, b_cancer.target,stratify=b_cancer.target,random_state=66)
+training_accuracy=[]
+test_accuracy=[]
+neighbours_setting=range(1,10)
+
+for n_neighbours in neighbours_setting:
+ clf=KNeighborsClassifier(n_neighbors=n_neighbours)
+ clf.fit(Xtrain,ytrain)
+ training_accuracy.append(clf.score(Xtrain,ytrain))
+ test_accuracy.append(clf.score(Xtest,ytest))
+
+
+from matplotlib import pyplot as plt
+plt.plot(neighbours_setting, training_accuracy,label="training accuracy")
+plt.plot(neighbours_setting,test_accuracy,label="testing accuracy")
+plt.ylabel=("accuracy")
+plt.xlabel=("n_neighbours")
+plt.legend()
+plt.show()
+
