@@ -1,0 +1,15 @@
+import  pandas as pd
+path=r'F:\machine learning\train.csv'
+data=pd.read_csv(path)
+print("keys:",data.keys())
+feature=['LotArea','YearBuilt','1stFlrSF','2ndFlrSF','FullBath','BedroomAbvGr','TotRmsAbvGrd']
+y=data.SalePrice
+x=data[feature]
+print(x.head())
+
+
+from sklearn.tree import DecisionTreeRegressor
+data_model=DecisionTreeRegressor(random_state=1)
+data_model.fit(x,y)
+prediction=data_model.predict(x)
+print(prediction)
