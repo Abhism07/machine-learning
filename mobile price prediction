@@ -1,0 +1,19 @@
+import pandas as pd
+path=r'F:\machine learning\mobileprice.csv'
+mob_data=pd.read_csv(path)
+print('keys',mob_data.keys())
+features=['battery_power','dual_sim','ram','four_g']
+x=mob_data[features]
+y=mob_data.price_range
+
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+xtrain,x_val,ytrain,y_val=train_test_split(x,y,random_state=0)
+mob_model=DecisionTreeRegressor(random_state=1)
+mob_model.fit(xtrain,ytrain)
+prediction=mob_model.predict(x_val)
+print(mean_absolute_error(y_val,prediction))
+
+
+
